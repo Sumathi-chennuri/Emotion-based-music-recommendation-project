@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body style="text-align:center">
+
+<h1>Emotion Music System 🎵</h1>
+
+<img src="{{ url_for('video') }}" width="500">
+
+<h2 id="emotion">Detecting...</h2>
+
+<audio id="player" controls autoplay>
+    <source id="source" src="" type="audio/mpeg">
+</audio>
+
+<script>
+setInterval(function(){
+    fetch('/get_emotion')
+    .then(response => response.json())
+    .then(data => {
+
+        // Update emotion text
+        document.getElementById("emotion").innerText =
+            "Emotion: " + data.emotion;
+
+        // Update song
+        let audio = document.getElementById("player");
+        let source = document.getElementById("source");
+
+        source.src = "/static/songs/" + data.song;
+
+        audio.load();  // reload song
+        audio.play();  // play automatically
+    });
+}, 3000); // every 3 seconds
+</script>
+
+</body>
+</html>
